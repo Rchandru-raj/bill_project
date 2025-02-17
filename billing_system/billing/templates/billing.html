@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .denomination-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 200px;
+        }
+        .denomination-row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        // Function to add new product input fields dynamically
+        function addProductField() {
+            const container = document.getElementById("products");
+            const div = document.createElement("div");
+            div.innerHTML = ` 
+                <input type="text" placeholder="Product ID" class="product-id" required>
+                <input type="number" placeholder="Quantity" class="product-quantity" required>
+            `;
+            container.appendChild(div);
+        }
+
+        // Function to generate bill after collecting input
+        async function generateBill() {
+            const email = document.getElementById("email").value;
+            const paidAmount = document.getElementById("paid").value;
+            if (!email || !paidAmount) {
+                alert("Please provide both email and paid amount!");
+                return;
+            }
+
+            const productFields = document.querySelectorAll(".product-id");
+            const quantityFields = document.querySelectorAll(".product-quantity");
+
+            if (productFields.length === 0 || Array.from(productFields).some(field => !field.value)) {
+                alert("Please add at least one product with valid product ID and quantity.");
+                return;
+            }
+
+            let items = [];
+            for (let i = 0; i < productFields.length; i++) {
+                items.push({
+                    product_id: productFields[i].value,
+                    quantity: quantityFields[i].value
+                });
+            }
+
+            // Collecting denomination details
+            const denominations = {};
+            const denominationFields = document.querySelectorAll(".denomination-container input");
+            denominationFields.forEach(input => {
+                const denomination = input.previousElementSibling.textContent.trim();
+                denominations[denomination] = input.value ? parseInt(input.value) : 0;
+            });
+
+            const response = await fetch("/api/generate_invoice/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    customer_email: email,
+                    items: items,  // Corrected field name to 'items'
+                    paid_amount: paidAmount,  // Corrected field name to 'paid_amount'
+                    denominations: denominations
+                })
+            });
+
+            const data = await response.json();
+
+            // Handle response and show total
+            if (response.ok && data.net_price) {
+                alert("Bill Generated! Total: " + data.net_price);
+            } else {
+                alert("Error generating bill: " + (data.error || "Unknown error"));
+            }
+        }
+
+        // Function to cancel and reload the page
+        function cancel() {
+            location.reload();
+        }
+    </script>
+</head>
+<body>
+
+    <h2>Billing Page</h2>
+    
+    <label>Customer Email:</label>
+    <input type="email" id="email" placeholder="Email ID" required><br><br>
+
+    <button onclick="addProductField()">Add New Product</button><br><br>
+
+    <div id="products">
+        <input type="text" placeholder="Product ID" class="product-id" required>
+        <input type="number" placeholder="Quantity" class="product-quantity" required>
+    </div><br>
+
+    <h3>Denominations</h3>
+    <div class="denomination-container">
+        <div class="denomination-row"><label>500</label> <input type="number" placeholder="count" min="0"></div>
+        <div class="denomination-row"><label>50</label> <input type="number" placeholder="count" min="0"></div>
+        <div class="denomination-row"><label>20</label> <input type="number" placeholder="count" min="0"></div>
+        <div class="denomination-row"><label>10</label> <input type="number" placeholder="count" min="0"></div>
+        <div class="denomination-row"><label>5</label> <input type="number" placeholder="count" min="0"></div>
+        <div class="denomination-row"><label>2</label> <input type="number" placeholder="count" min="0"></div>
+        <div class="denomination-row"><label>1</label> <input type="number" placeholder="count" min="0"></div>
+    </div><br>
+
+    <label>Cash Paid by Customer</label>
+    <input type="number" id="paid" placeholder="Amount" min="0" required><br><br>
+
+    <div class="button-container">
+        <button onclick="cancel()">Cancel</button>
+        <button onclick="generateBill()">Generate Bill</button>
+    </div>
+
+</body>
+</html>

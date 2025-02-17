@@ -1,0 +1,180 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 16px;
+            border: 1px solid black;
+        }
+        h3 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 8px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px 0;
+            text-align: left;
+        }
+        .summary {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 14px;
+        }
+        .balance {
+            border-top: 2px solid black;
+            margin-top: 20px;
+            padding-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Billing Page</h3>
+        <p><strong>Customer Email:</strong> {{ customer_email }}</p>
+
+        <h4>Bill Section</h4>
+        <table>
+            <tr>
+                <th>Product ID</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Purchase Price</th>
+                <th>Tax % for Item</th>
+                <th>Tax Payable</th>
+                <th>Total Price</th>
+            </tr>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.product_id }}</td>
+                <td>{{ item.unit_price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.purchase_price }}</td>
+                <td>{{ item.tax_percent }}%</td>
+                <td>{{ item.tax_payable }}</td>
+                <td>{{ item.total_price }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="summary">
+            <p><strong>Total price without tax:</strong> {{ total_without_tax }}</p>
+            <p><strong>Total tax payable:</strong> {{ total_tax }}</p>
+            <p><strong>Net price of the purchased items:</strong> {{ net_price }}</p>
+            <p><strong>Rounded down net price:</strong> {{ rounded_net_price }}</p>
+            <p><strong>Balance payable to the customer:</strong>{{ balance_payable }}</p>
+        </div>
+
+        <div class="balance">
+            <h4>Balance Denomination:</h4>
+            {% for note, count in denominations.items %}
+                <p><strong>{{ note }}:</strong> {{ count }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 16px;
+            border: 1px solid black;
+        }
+        h3 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 8px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px 0;
+            text-align: left;
+        }
+        .summary {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 14px;
+        }
+        .balance {
+            border-top: 2px solid black;
+            margin-top: 20px;
+            padding-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Billing Page</h3>
+        <p><strong>Customer Email:</strong> {{ customer_email }}</p>
+
+        <h4>Bill Section</h4>
+        <table>
+            <tr>
+                <th>Product ID</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Purchase Price</th>
+                <th>Tax % for Item</th>
+                <th>Tax Payable</th>
+                <th>Total Price</th>
+            </tr>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.product_id }}</td>
+                <td>{{ item.unit_price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.purchase_price }}</td>
+                <td>{{ item.tax_percent }}%</td>
+                <td>{{ item.tax_payable }}</td>
+                <td>{{ item.total_price }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="summary">
+            <p><strong>Total price without tax:</strong> {{ total_without_tax }}</p>
+            <p><strong>Total tax payable:</strong> {{ total_tax }}</p>
+            <p><strong>Net price of the purchased items:</strong> {{ net_price }}</p>
+            <p><strong>Rounded down net price:</strong> {{ rounded_net_price }}</p>
+            <p><strong>Balance payable to the customer:</strong> {{ balance_payable }}</p>
+        </div>
+
+        <div class="balance">
+            <h4>Balance Denomination:</h4>
+            {% for note, count in denominations.items %}
+                <p><strong>{{ note }}:</strong> {{ count }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
